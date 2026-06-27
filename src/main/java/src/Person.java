@@ -87,9 +87,6 @@ class Person {
     }
 
 
-
-
-
     public void setLastName(String lastName) {
         this.lastName = lastName;
     }
@@ -187,5 +184,21 @@ class Person {
             grandChildren.addAll(children.getChildren());
         }
         return grandChildren;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "name='" + name + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                ", sex='" + sex + '\'' +
+                ", mother=" + mother +
+                ", father=" + father +
+                ", children=" + children +
+                ", siblings=" + siblings +
+                ", pets=" + pets +
+                '}';
     }
 }
