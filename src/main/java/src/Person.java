@@ -7,20 +7,20 @@ import java.util.List;
 class Person {
     private String name;
     private String middleName = "";
-    private String lastName;
-    private int age;
+    private String lastName;;
     private String sex;
+    private int age;
     private Person mother;
     private Person father;
+    private List<Person> siblings = new ArrayList<>();
     private List<Person> children = new ArrayList<>();
-    private List<Person> siblings;
-    private List<Pet> pets;
+    private List<Pet> pets = new ArrayList<>();
 
-    public Person(String name, String lastName, String sex, int age) {
+    public Person(String name, String lastName,int age, String sex) {
         this.name = name;
         this.lastName = lastName;
-        this.sex = sex;
         this.age = age;
+        this.sex = sex;
     }
 
     public Person(String name, String middleName, String lastName, int age, String sex) {
@@ -31,78 +31,105 @@ class Person {
         this.sex = sex;
     }
 
-    public Person(String name) {
-        this.name = name;
-    }
 
+// Getters
     public String getName() {
         return name;
-    }
-
-    public List<Person> getchildren() {
-        return this.children;
-    }
-
-    public Person getFather() {
-        return father;
-    }
-
-    public Person getMother() {
-        return mother;
-    }
-
-
-    public int getAge() {
-        return age;
-    }
-
-    public void setAge(int age) {
-        this.age = age;
-    }
-
-    public String getSex() {
-        return sex;
-    }
-
-    public void setSex(String sex) {
-        this.sex = sex;
-    }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-    public void setPets(List<Pet> pets) {
-        this.pets = pets;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-
-
-    public void setChilderen(List<Person> childeren) {
-        this.children = childeren;
-    }
-
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
     }
 
     public String getMiddleName() {
         return middleName;
     }
 
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
+    public String getLastName() {
+        return lastName;
+    }
+
+    public String getSex() {
+        return sex;
+    }
+
+    public int getAge() {
+        return age;
+    }
+
+    public Person getMother() {
+        return mother;
+    }
+
+    public Person getFather() {
+        return father;
     }
 
     public List<Person> getSiblings() {
         return findSiblings();
     }
 
+    public List<Person> getChildren() {
+
+        return this.children;
+    }
+
+    public List<Pet> getPets() {
+        return this.pets;
+    }
+
+
+    // Setters
+    public void setName(String name) {
+        this.name = name;
+    }
+
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+
+    public void setSex(String sex) {
+        this.sex = sex;
+    }
+
+    public void setAge(int age) {
+        if(age == 0){
+            this.age = age;
+        }else {
+            this.age++;
+        }
+    }
+
+    public void setMother(Person mother) {
+        this.mother = mother;
+    }
+
+    public void setFather(Person father) {
+        this.father = father;
+    }
+
+    public void setSiblings(List<Person> siblings) {
+        this.siblings = siblings;
+    }
+
+    public void setChildren(List<Person> children) {
+        this.children = new ArrayList<>();
+        if(children == null) {
+            return;
+        }
+        this.children = new ArrayList<>();
+        for (Person child: children) {
+            addChild(child);
+        }
+    }
+
+    public void setPets(List<Pet> pets) {
+        this.pets = pets;
+    }
+
+
+    // helpers
     private List<Person> findSiblings() {
         var siblings = new HashSet<Person>();
         if (mother != null) {
@@ -116,39 +143,24 @@ class Person {
         List<Person> siblingsList = new ArrayList<>(siblings);
         return siblingsList;
     }
-
-    public List<Person> getChildren() {
-        return this.children;
+    private String personName(Person person) {
+        return person == null ? "null" : person.getFullName();
+    }
+    private List<String> personNames(List<Person> people) {
+        return people.stream()
+                .map(this::personName)
+                .toList();
     }
 
-    public List<Pet> getPets() {
-        return this.pets;
+    public String getFullName() {
+        return String.join(" ",
+                name == null ? "" : name,
+                middleName == null ? "" : middleName,
+                lastName == null ? "" : lastName
+        ).trim();
     }
 
-    public void setSiblings(List<Person> siblings) {
-        this.siblings = siblings;
-    }
-
-    public void setMother(Person mother) {
-        this.mother = mother;
-    }
-
-    public void setFather(Person father) {
-        this.father = father;
-    }
-
-
-    public void setChildren(List<Person> children) {
-        this.children = new ArrayList<>();
-        if(children == null) {
-            return;
-        }
-        this.children = new ArrayList<>();
-        for (Person child: children) {
-            addChild(child);
-        }
-    }
-
+// Others
     public void addParents(Person father, Person mother){
         setMother(mother);
         mother.addChild(this);
@@ -161,10 +173,10 @@ class Person {
         {
             getChildren().add(child);
         }
-        if(sex == "male" ){
+        if(sex.equals("male")){
             child.setFather(this);
         }
-        if(sex == "female" ){
+        if(sex.equals("female" )){
             child.setMother(this);
         }
     }
@@ -194,10 +206,10 @@ class Person {
                 ", lastName='" + lastName + '\'' +
                 ", age=" + age +
                 ", sex='" + sex + '\'' +
-                ", mother=" + mother +
-                ", father=" + father +
-                ", children=" + children +
-                ", siblings=" + siblings +
+                ", mother=" + personName(mother) +
+                ", father=" + personName(father) +
+                ", children=" + personNames(children) +
+                ", siblings=" + personNames(siblings) +
                 ", pets=" + pets +
                 '}';
     }
